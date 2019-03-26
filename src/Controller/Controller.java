@@ -5,10 +5,18 @@
  */
 package Controller;
 
+import Model.ConectionDB;
+
 /**
  *
  * @author kened
  */
 public class Controller {
+    
+    ConectionDB conn = new ConectionDB();
+
+    public void conectarDB() {
+        conn.conectionBD();
+    }
     
 }

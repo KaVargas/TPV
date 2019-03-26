@@ -19,7 +19,7 @@ public class ConectionDB {
     String jdbcDriver = ("com.mysql.jdbc.Driver");//drivers
     String jdbcSup = ("mysql");//base de datos
     String jdbcHost = ("localhost");//servidor
-    String jdbcBd = ("capp");//nombre de la base de datos
+    String jdbcBd = ("tpv");//nombre de la base de datos
     String jdbcUser = ("root");//usuario
     String jdbcPwd = ("12345678");//pongo mi clave
     Connection con = null;
@@ -33,6 +33,7 @@ public class ConectionDB {
             Class.forName(jdbcDriver);
             String strcon = "jdbc:" + jdbcSup + "://" + jdbcHost + "/" + jdbcBd;
             con = DriverManager.getConnection(strcon, jdbcUser, jdbcPwd);
+            System.out.println(con.toString());
             return con;
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "mensaje fallo de conexion", JOptionPane.ERROR_MESSAGE);
