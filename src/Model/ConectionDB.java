@@ -7,7 +7,10 @@ package Model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,6 +18,7 @@ import javax.swing.JOptionPane;
  * @author kened
  */
 public class ConectionDB {
+
     //------Atributos de la clase----------
     String jdbcDriver = ("com.mysql.jdbc.Driver");//drivers
     String jdbcSup = ("mysql");//base de datos
@@ -42,6 +46,77 @@ public class ConectionDB {
         } catch (SQLException exsql) {
             JOptionPane.showMessageDialog(null, exsql.getMessage(), "mensaje", JOptionPane.ERROR_MESSAGE);
             System.out.println("BDD INCORRECTA" + exsql.getMessage());
+            return null;
+        }
+    }
+
+    public boolean insertClient(ClientDAO client) {
+
+        String sql = "INSERT INTO person(person_id, name_person, lastName_person, city, address, phone, mail) VALUES(?,?,?,?,?,?,?)";
+
+        try (Connection conn = this.conectionBD();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, client.getCedula());
+            pstmt.setString(2, client.getNames());
+            pstmt.setString(3, client.getLastNames());
+            pstmt.setString(4, client.getCity());
+            pstmt.setString(5, client.getAddress());
+            pstmt.setString(6, client.getPhone());
+            pstmt.setString(7, client.getEmail());
+            pstmt.executeUpdate();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public boolean insertEmployee(EmployeeDAO employee) {
+        String sql = "INSERT INTO employee(password, person_id) VALUES(?,?)";
+
+        try (Connection conn = this.conectionBD();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, employee.getPassword());
+            pstmt.setString(2, employee.getCedula());
+            pstmt.executeUpdate();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public ClientDAO getClient(String text) {
+
+        try {
+
+            Connection conn = conectionBD();
+            // our SQL SELECT query. 
+            // if you only need a few columns, specify them by name instead of using "*"
+            String query = "SELECT * FROM person WHERE person_id LIKE '";
+            query += text;
+            query += "'";
+
+            // create the java statement
+            Statement st = conn.createStatement();
+
+            // execute the query, and get a java resultset
+            ResultSet rs = st.executeQuery(query);
+            ClientDAO client = new ClientDAO();
+            while (rs.next()) {
+                client.setNames(rs.getString("name_person"));
+                client.setLastNames(rs.getString("lastName_person"));
+                client.setCity(rs.getString("city"));
+                client.setAddress(rs.getString("address"));
+                client.setPhone(rs.getString("phone"));
+                client.setEmail(rs.getString("mail"));
+            }
+            conn.close();
+            return client;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
             return null;
         }
     }

@@ -5,7 +5,10 @@
  */
 package Controller;
 
+import Model.ClientDAO;
 import Model.ConectionDB;
+import Model.EmployeeDAO;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,5 +21,35 @@ public class Controller {
     public void conectarDB() {
         conn.conectionBD();
     }
-    
+
+    public void insertClient(ClientDAO client) {
+        if(conn.insertClient(client)){
+            JOptionPane.showMessageDialog(null, "Usuario ingresado exitosamente");
+        }else{
+            JOptionPane.showMessageDialog(null, "Algo pasó, intentalo de nuevo!");
+        }
+    }
+
+    public boolean isComplete(ClientDAO client) {
+        return (!(client.getCedula().isEmpty() || client.getNames().isEmpty() || client.getLastNames().isEmpty()
+                || client.getCity().isEmpty() || client.getAddress().isEmpty() || client.getPhone().isEmpty()
+                || client.getEmail().isEmpty()));
+    }
+
+    public boolean isComplete(EmployeeDAO employee) {
+        return (!( employee.getCedula().isEmpty() || employee.getPassword().isEmpty()));
+    }
+
+    public void insertEmployee(EmployeeDAO employee) {
+        if(conn.insertEmployee(employee)){
+            JOptionPane.showMessageDialog(null, "Empleado ingresado exitosamente");
+        }else{
+            JOptionPane.showMessageDialog(null, "Algo pasó, intentalo de nuevo!");
+        }
+    }
+
+    public ClientDAO getClient(String text) {
+        ClientDAO client = conn.getClient(text);
+        return client;
+    }
 }
