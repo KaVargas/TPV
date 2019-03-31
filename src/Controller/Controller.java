@@ -8,6 +8,7 @@ package Controller;
 import Model.ClientDAO;
 import Model.ConectionDB;
 import Model.EmployeeDAO;
+import Model.ProductDAO;
 import javax.swing.JOptionPane;
 
 /**
@@ -51,5 +52,22 @@ public class Controller {
     public ClientDAO getClient(String text) {
         ClientDAO client = conn.getClient(text);
         return client;
+    }
+
+    public boolean isComplete(ProductDAO product) {
+        return (!(product.getDescription().isEmpty() || product.getCategory().isEmpty()));
+    }
+
+    public void insertProduct(ProductDAO product) {
+        if(conn.insertProduct(product)){
+            JOptionPane.showMessageDialog(null, "Producto ingresado exitosamente");
+        }else{
+            JOptionPane.showMessageDialog(null, "Algo pasó, intentalo de nuevo!");
+        }
+    }
+
+    public ProductDAO getProduct(String text) {
+        ProductDAO product = conn.getProduct(text);
+        return product;
     }
 }

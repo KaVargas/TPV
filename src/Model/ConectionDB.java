@@ -120,4 +120,52 @@ public class ConectionDB {
             return null;
         }
     }
+
+    public boolean insertProduct(ProductDAO product) {
+        String sql = "INSERT INTO product(product_id, description, price, category) VALUES(?,?,?,?)";
+
+        try (Connection conn = this.conectionBD();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, product.getCode());
+            pstmt.setString(2, product.getDescription());
+            pstmt.setFloat(3, product.getPrice());
+            pstmt.setString(4, product.getCategory());
+            pstmt.executeUpdate();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public ProductDAO getProduct(String text) {
+        try {
+
+            Connection conn = conectionBD();
+            // our SQL SELECT query. 
+            // if you only need a few columns, specify them by name instead of using "*"
+            String query = "SELECT * FROM product WHERE product_id LIKE '";
+            query += text;
+            query += "'";
+
+            // create the java statement
+            Statement st = conn.createStatement();
+
+            // execute the query, and get a java resultset
+            ResultSet rs = st.executeQuery(query);
+            ProductDAO product = new ProductDAO();
+            while (rs.next()) {
+                product.setCode(rs.getInt("product_id"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getFloat("price"));
+                product.setCategory(rs.getString("category"));
+            }
+            conn.close();
+            return product;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 }

@@ -8,6 +8,7 @@ package View;
 import Controller.Controller;
 import Model.ClientDAO;
 import Model.EmployeeDAO;
+import Model.ProductDAO;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,6 +22,7 @@ public class AddFrame extends javax.swing.JFrame {
      */
     Controller controlador = new Controller();
     boolean exist = false;
+    boolean exist2 = false;
 
     public AddFrame() {
         initComponents();
@@ -91,6 +93,12 @@ public class AddFrame extends javax.swing.JFrame {
         jTabbedPane7.setPreferredSize(new java.awt.Dimension(534, 450));
 
         jLabel8.setText("Cédula");
+
+        jTFCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTFCedulaKeyReleased(evt);
+            }
+        });
 
         jLabel9.setText("Nombres");
 
@@ -205,21 +213,27 @@ public class AddFrame extends javax.swing.JFrame {
         jPanel4.add(jTFCedula2, new org.netbeans.lib.awtextra.AbsoluteConstraints(114, 19, 150, -1));
 
         jTFNames2.setEditable(false);
+        jTFNames2.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.add(jTFNames2, new org.netbeans.lib.awtextra.AbsoluteConstraints(114, 49, 350, -1));
 
         jTFLastNames2.setEditable(false);
+        jTFLastNames2.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.add(jTFLastNames2, new org.netbeans.lib.awtextra.AbsoluteConstraints(114, 79, 350, -1));
 
         jTFCity2.setEditable(false);
+        jTFCity2.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.add(jTFCity2, new org.netbeans.lib.awtextra.AbsoluteConstraints(114, 109, 350, -1));
 
         jTFAddress2.setEditable(false);
+        jTFAddress2.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.add(jTFAddress2, new org.netbeans.lib.awtextra.AbsoluteConstraints(114, 139, 350, -1));
 
         jTFPhone2.setEditable(false);
+        jTFPhone2.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.add(jTFPhone2, new org.netbeans.lib.awtextra.AbsoluteConstraints(114, 169, 150, -1));
 
         jTFEmail2.setEditable(false);
+        jTFEmail2.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.add(jTFEmail2, new org.netbeans.lib.awtextra.AbsoluteConstraints(114, 199, 350, -1));
 
         jLabel16.setText("Nombres");
@@ -280,6 +294,11 @@ public class AddFrame extends javax.swing.JFrame {
         });
 
         btnSave3.setText("Guardar");
+        btnSave3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSave3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -410,7 +429,7 @@ public class AddFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClean3ActionPerformed
 
     private void jTFCedula2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFCedula2KeyReleased
-        if (jTFCedula2.getText().length() == 10 && !exist) {
+        if (jTFCedula2.getText().length() == 10 && !exist2) {
             ClientDAO client = controlador.getClient(jTFCedula2.getText());
             if (client != null) {
                 jTFNames2.setText(client.getNames());
@@ -419,12 +438,12 @@ public class AddFrame extends javax.swing.JFrame {
                 jTFAddress2.setText(client.getAddress());
                 jTFPhone2.setText(client.getPhone());
                 jTFEmail2.setText(client.getEmail());
-                exist = true;
+                exist2 = true;
             } else {
                 jTFCedula2.setText("");
             }
         } else {
-            exist = false;
+            exist2 = false;
             jTFNames2.setText("");
             jTFLastNames2.setText("");
             jTFCity2.setText("");
@@ -434,6 +453,44 @@ public class AddFrame extends javax.swing.JFrame {
             jTFPassword.setText("");
         }
     }//GEN-LAST:event_jTFCedula2KeyReleased
+
+    private void btnSave3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave3ActionPerformed
+        ProductDAO product = new ProductDAO();
+        product.setCode(Integer.parseInt(jTFCode.getText()));
+        product.setDescription(jTFDescription.getText());
+        product.setPrice(Float.parseFloat(jTFPrice.getText()));
+        product.setCategory(jTFCategory.getText());
+        if(controlador.isComplete(product)){
+            controlador.insertProduct(product);
+        }else {
+            JOptionPane.showMessageDialog(null, "Completa todos los campos");
+        }
+    }//GEN-LAST:event_btnSave3ActionPerformed
+
+    private void jTFCedulaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFCedulaKeyReleased
+        if (jTFCedula.getText().length() == 10 && !exist) {
+            ClientDAO client = controlador.getClient(jTFCedula.getText());
+            if (client != null) {
+                jTFNames.setText(client.getNames());
+                jTFLastNames.setText(client.getLastNames());
+                jTFCity.setText(client.getCity());
+                jTFAddress.setText(client.getAddress());
+                jTFPhone.setText(client.getPhone());
+                jTFEmail.setText(client.getEmail());
+                exist = true;
+            } else {
+                jTFCedula.setText("");
+            }
+        } else {
+            exist = false;
+            jTFNames.setText("");
+            jTFLastNames.setText("");
+            jTFCity.setText("");
+            jTFAddress.setText("");
+            jTFPhone.setText("");
+            jTFEmail.setText("");
+        }
+    }//GEN-LAST:event_jTFCedulaKeyReleased
 
     /**
      * @param args the command line arguments
