@@ -1,0 +1,46 @@
+CREATE TABLE IF NOT EXISTS Product (
+    product_id INT NOT NULL,
+    description VARCHAR(64) NOT NULL,
+    price FLOAT NOT NULL,
+    category VARCHAR(32) NOT NULL,
+    PRIMARY KEY (product_id)
+);
+
+CREATE TABLE IF NOT EXISTS Orden (
+    order_id INT AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    discount INT NOT NULL,
+    PRIMARY KEY (order_id),
+    FOREIGN KEY (product_id) REFERENCES Product(product_id)
+);
+
+CREATE TABLE IF NOT EXISTS Person (
+    person_id VARCHAR(10) NOT NULL,
+    name_person VARCHAR(64) NOT NULL,
+    lastName_person VARCHAR(64) NOT NULL,
+    city VARCHAR(32) NOT NULL,
+    address VARCHAR(64) NOT NULL,
+    phone VARCHAR(16) NOT NULL,
+    mail VARCHAR(32) NOT NULL,
+    PRIMARY KEY (person_id)
+);
+
+CREATE TABLE IF NOT EXISTS Employee (
+    employee_id INT AUTO_INCREMENT,
+    password VARCHAR(64) NOT NULL,
+    person_id VARCHAR(10) NOT NULL,
+    PRIMARY KEY (employee_id),
+    FOREIGN KEY (person_id) REFERENCES Person(person_id)
+);
+
+CREATE TABLE IF NOT EXISTS Sale (
+    sale_id INT AUTO_INCREMENT,
+    order_id INT NOT NULL,
+    employee_id INT NOT NULL,
+    date_sale DATE NOT NULL,
+    type VARCHAR(32) NOT NULL,
+    PRIMARY KEY (sale_id),
+    FOREIGN KEY (order_id) REFERENCES Orden(order_id),
+    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
+);
